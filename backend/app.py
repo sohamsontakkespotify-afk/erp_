@@ -34,8 +34,12 @@ def create_app(config_name=None):
     mail.init_app(app)  # Initialize Mail with app
     Session(app)  # Initialize Flask-Session
 
-    CORS(app ,origins=["https://erp-3p2p-git-main-sohams-projects-703c1079.vercel.app"], 
-         supports_credentials=True)
+    CORS(app,
+         origins=["https://erp-3p2p.vercel.app", "https://your-vercel-preview.vercel.app"],
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    )
     
     # Register blueprints
     register_blueprints(app)
