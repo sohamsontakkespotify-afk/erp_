@@ -11,10 +11,10 @@ class Config:
     """Base configuration class"""
     
     # Database Configuration
-    MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
-    MYSQL_USER = os.getenv('MYSQL_USER', 'root')
-    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'admin')
-    MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'production_management')
+    MYSQL_HOST = os.getenv('MYSQL_HOST', 'mysql-soham-19.alwaysdata.net')
+    MYSQL_USER = os.getenv('MYSQL_USER', 'soham-19')
+    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', '191003Soham#')
+    MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'soham-19_erp')
     
     SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
