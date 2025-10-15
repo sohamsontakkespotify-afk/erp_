@@ -1,0 +1,317 @@
+            {/* Job Posting Form */}
+            {modalType === 'jobPosting' && (
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="jobTitle">Job Title *</Label>
+                  <Input
+                    id="jobTitle"
+                    value={jobForm.title}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setJobForm({...jobForm, title: e.target.value})}
+                    placeholder="e.g., Senior Software Engineer"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="jobDepartment">Department *</Label>
+                    <Select value={jobForm.department} onValueChange={(value) => setJobForm({...jobForm, department: value})}>
+                      <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="IT">IT</SelectItem>
+                        <SelectItem value="HR">HR</SelectItem>
+                        <SelectItem value="Sales">Sales</SelectItem>
+                        <SelectItem value="Marketing">Marketing</SelectItem>
+                        <SelectItem value="Finance">Finance</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="employmentType">Employment Type *</Label>
+                    <Select value={jobForm.employmentType} onValueChange={(value) => setJobForm({...jobForm, employmentType: value})}>
+                      <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="full-time">Full Time</SelectItem>
+                        <SelectItem value="part-time">Part Time</SelectItem>
+                        <SelectItem value="contract">Contract</SelectItem>
+                        <SelectItem value="internship">Internship</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="location">Location</Label>
+                    <Input
+                      id="location"
+                      value={jobForm.location}
+                      className="bg-white text-gray-900 border-gray-300"
+                      onChange={(e) => setJobForm({...jobForm, location: e.target.value})}
+                      placeholder="e.g., New York, Remote"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="experienceLevel">Experience Level</Label>
+                    <Select value={jobForm.experienceLevel} onValueChange={(value) => setJobForm({...jobForm, experienceLevel: value})}>
+                      <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                        <SelectValue placeholder="Select level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="entry">Entry Level</SelectItem>
+                        <SelectItem value="mid">Mid Level</SelectItem>
+                        <SelectItem value="senior">Senior Level</SelectItem>
+                        <SelectItem value="lead">Lead</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="salaryRange">Salary Range</Label>
+                  <Input
+                    id="salaryRange"
+                    value={jobForm.salaryRange}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setJobForm({...jobForm, salaryRange: e.target.value})}
+                    placeholder="e.g., $80,000 - $120,000"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="description">Job Description *</Label>
+                  <Textarea
+                    id="description"
+                    value={jobForm.description}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setJobForm({...jobForm, description: e.target.value})}
+                    placeholder="Describe the role and responsibilities..."
+                    rows={4}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="requirements">Requirements</Label>
+                  <Textarea
+                    id="requirements"
+                    value={jobForm.requirements}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setJobForm({...jobForm, requirements: e.target.value})}
+                    placeholder="List the required skills and qualifications..."
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="responsibilities">Responsibilities</Label>
+                  <Textarea
+                    id="responsibilities"
+                    value={jobForm.responsibilities}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setJobForm({...jobForm, responsibilities: e.target.value})}
+                    placeholder="List the key responsibilities..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Performance Review Form */}
+            {modalType === 'performanceReview' && (
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="reviewEmployee">Select Employee *</Label>
+                  <Select 
+                    value={performanceReviewForm.employeeId} 
+                    onValueChange={(value) => setPerformanceReviewForm({...performanceReviewForm, employeeId: value})}
+                  >
+                    <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                      <SelectValue placeholder="Choose an employee" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {employees.filter(emp => emp.status === 'active').map((emp) => (
+                        <SelectItem key={emp.id} value={emp.id.toString()}>
+                          {emp.name || `${emp.firstName} ${emp.lastName}`} - {emp.department}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="reviewPeriod">Review Period *</Label>
+                    <Input
+                      id="reviewPeriod"
+                      value={performanceReviewForm.reviewPeriod}
+                      className="bg-white text-gray-900 border-gray-300"
+                      onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, reviewPeriod: e.target.value})}
+                      placeholder="e.g., Q1 2024, Jan-Mar 2024"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="overallRating">Overall Rating (1-5) *</Label>
+                    <Input
+                      id="overallRating"
+                      type="number"
+                      min="1"
+                      max="5"
+                      step="0.1"
+                      value={performanceReviewForm.overallRating}
+                      className="bg-white text-gray-900 border-gray-300"
+                      onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, overallRating: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="goalsAchievement">Goals Achievement</Label>
+                  <Textarea
+                    id="goalsAchievement"
+                    value={performanceReviewForm.goalsAchievement}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, goalsAchievement: e.target.value})}
+                    placeholder="Describe the goals achieved during this period..."
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="strengths">Strengths</Label>
+                  <Textarea
+                    id="strengths"
+                    value={performanceReviewForm.strengths}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, strengths: e.target.value})}
+                    placeholder="List the employee's key strengths..."
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="areasForImprovement">Areas for Improvement</Label>
+                  <Textarea
+                    id="areasForImprovement"
+                    value={performanceReviewForm.areasForImprovement}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, areasForImprovement: e.target.value})}
+                    placeholder="Identify areas where improvement is needed..."
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="developmentPlan">Development Plan</Label>
+                  <Textarea
+                    id="developmentPlan"
+                    value={performanceReviewForm.developmentPlan}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, developmentPlan: e.target.value})}
+                    placeholder="Outline the development plan for the employee..."
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="reviewerComments">Reviewer Comments *</Label>
+                  <Textarea
+                    id="reviewerComments"
+                    value={performanceReviewForm.reviewerComments}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, reviewerComments: e.target.value})}
+                    placeholder="Add your overall comments about the employee's performance..."
+                    rows={4}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="employeeComments">Employee Comments</Label>
+                  <Textarea
+                    id="employeeComments"
+                    value={performanceReviewForm.employeeComments}
+                    className="bg-white text-gray-900 border-gray-300"
+                    onChange={(e) => setPerformanceReviewForm({...performanceReviewForm, employeeComments: e.target.value})}
+                    placeholder="Employee's self-assessment and comments..."
+                    rows={3}
+                  />
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-700">
+                    <strong>Note:</strong> Performance reviews help track employee progress and identify development opportunities.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            </div>
+
+            {/* Modal Footer with Action Buttons */}
+            <div className="flex-shrink-0 flex justify-end gap-2 px-6 py-4 border-t border-gray-200">
+              <Button variant="outline" onClick={closeModal} className="bg-white text-gray-900 border-gray-300 hover:bg-gray-50">
+                Cancel
+              </Button>
+              
+              {modalType === 'addEmployee' && (
+                <Button onClick={handleSubmit} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Add Employee
+                </Button>
+              )}
+              
+              {modalType === 'editEmployee' && (
+                <Button onClick={handleSubmit} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Update Employee
+                </Button>
+              )}
+              
+              {modalType === 'markAttendance' && (
+                <Button onClick={handleMarkAttendance} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Mark Attendance
+                </Button>
+              )}
+              
+              {modalType === 'leaveRequest' && (
+                <Button onClick={handleLeaveRequest} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Submit Request
+                </Button>
+              )}
+              
+              {modalType === 'jobPosting' && (
+                <Button onClick={handleSubmitJobPosting} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Create Job Posting
+                </Button>
+              )}
+              
+              {modalType === 'performanceReview' && (
+                <Button onClick={handleSubmitPerformanceReview} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Submit Review
+                </Button>
+              )}
+              
+              {modalType === 'generatePayroll' && (
+                <Button onClick={handleGeneratePayroll} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Generate Payroll
+                </Button>
+              )}
+              
+              {modalType === 'editPayroll' && (
+                <Button onClick={handleUpdatePayroll} className="bg-blue-600 text-white hover:bg-blue-700">
+                  Update Payroll
+                </Button>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </div>
+  );
+};
+
+export default HRDepartment;

@@ -1,0 +1,39 @@
+# Flask and Extensions
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-CORS==4.0.0
+Flask-Mail==0.9.1
+
+# Database
+PyMySQL==1.1.0
+SQLAlchemy==2.0.23
+alembic==1.12.1
+
+# Environment and Configuration
+python-dotenv==1.0.0
+
+# Web Scraping and HTTP Requests
+requests==2.31.0
+beautifulsoup4==4.12.2
+
+# Data Processing
+pandas==2.1.4
+openpyxl==3.1.2
+
+# Development Dependencies (optional)
+Flask-Testing==0.8.1
+pytest==7.4.3
+pytest-flask==1.2.0
+
+# Production Dependencies (optional)
+gunicorn==21.2.0
+redis==5.0.1
+
+# OAuth
+authlib==1.2.0
+
+# PDF Generation
+pdfkit==1.0.0
+
+# Face Recognition (OpenCV)
+opencv-python==4.8.1.78
