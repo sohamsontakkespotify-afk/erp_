@@ -378,7 +378,7 @@ const DispatchDepartment = () => {
     {/* Order Status Bar */}
       <div className="max-w-7xl mx-auto px-6 py-4">
         <OrderStatusBar className="mb-4" />
-      </div>
+     
                 
                 {/* Main Content */}
                 <div className="px-6 py-6 space-y-6">
@@ -964,6 +964,7 @@ const DispatchDepartment = () => {
           </div>
         </div>
         </div>
+         </div>
     );
 };
 
