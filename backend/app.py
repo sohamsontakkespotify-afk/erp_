@@ -40,9 +40,7 @@ def create_app(config_name=None):
          "https://erp-3p2p-git-main-sohams-projects-703c1079.vercel.app",
          "https://erp-3p2p-kurzr54dh-sohams-projects-703c1079.vercel.app"
      ],
-     supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization"],
-     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+     supports_credentials=True
 )
     
     # Register blueprints
