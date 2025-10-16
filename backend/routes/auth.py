@@ -231,7 +231,7 @@ def forgot_password():
         # For testing purposes, return the token in response
         # In production, send email with reset link
         # Use frontend base URL from config or environment variable, fallback to localhost with port 5173
-        frontend_base_url = current_app.config.get('FRONTEND_BASE_URL', 'https://erp-3p2p.vercel.app/api')
+        frontend_base_url = current_app.config.get('FRONTEND_BASE_URL', 'http://localhost:5173')
         reset_url = f"{frontend_base_url}/reset-password?token={reset_token_obj.token}"
 
         # Send email with reset_url
