@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/auth/register', methods=['POST', 'OPTIONS'])
+@auth_bp.route('/auth/register', methods=['POST'])
 def register():
     """Register a new user with pending status"""
     try:
@@ -52,7 +52,7 @@ def register():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-@auth_bp.route('/auth/login', methods=['POST', 'OPTIONS'])
+@auth_bp.route('/auth/login', methods=['POST'])
 def login():
     """Authenticate a user using either username or email and return user data"""
     try:
