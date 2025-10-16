@@ -19,7 +19,8 @@ import {
   TrendingUp,
   Truck,
   ClipboardCheck,
-  Eye
+  Eye,
+  Users
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -123,6 +124,13 @@ const Dashboard = () => {
       icon: Truck,
       color: 'from-cyan-500 to-cyan-600',
       description: 'Vehicle fleet and delivery management'
+    },
+    {
+      id: 'hr',
+      name: 'Human Resources Department',
+      icon: Users,
+      color: 'from-purple-500 to-purple-600',
+      description: 'Employee management and HR operations'
     }
   ];
 
