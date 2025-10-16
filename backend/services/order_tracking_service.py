@@ -106,109 +106,191 @@ class OrderTrackingService:
     @staticmethod
     def _determine_order_status(order, purchase_order, assembly_order, showroom_product):
         """Determine the current status, department, and progress of an order"""
-        current_status = "Unknown"
-        current_department = "Unknown"
-        status_color = "gray"
-        progress_percentage = 0
-        
-        # Determine status based on order progression
+        purchase_status_info = OrderTrackingService._get_purchase_status_info(purchase_order)
+
         if showroom_product:
             if showroom_product.showroom_status == 'available':
-                current_status = "On Display - Ready for Sales"
-                current_department = "Showroom"
-                status_color = "blue"
-                progress_percentage = 95
-            elif showroom_product.showroom_status == 'pending_review':
-                current_status = "Pending Showroom Review"
-                current_department = "Showroom"
-                status_color = "yellow"
-                progress_percentage = 85
-        elif assembly_order:
-            if assembly_order.status == 'sent_to_showroom':
-                current_status = "Sent to Showroom"
-                current_department = "Showroom"
-                status_color = "purple"
-                progress_percentage = 90
-            elif assembly_order.status == 'completed':
-                current_status = "Assembly Completed"
-                current_department = "Assembly"
-                status_color = "green"
-                progress_percentage = 80
-            elif assembly_order.status == 'in_progress':
-                current_status = f"In Production ({assembly_order.progress}%)"
-                current_department = "Assembly"
-                status_color = "blue"
-                progress_percentage = 40 + (assembly_order.progress * 0.4)  # 40-80% range
-            elif assembly_order.status == 'paused':
-                current_status = "Production Paused"
-                current_department = "Assembly"
-                status_color = "orange"
-                progress_percentage = 40 + (assembly_order.progress * 0.4)
-            elif assembly_order.status == 'pending':
-                if purchase_order and purchase_order.status in ['store_allocated', 'verified_in_store']:
-                    current_status = "Materials Ready - Pending Assembly Start"
-                    current_department = "Assembly"
-                    status_color = "green"
-                    progress_percentage = 35
-                else:
-                    current_status = "Waiting for Materials"
-                    current_department = "Assembly"
-                    status_color = "orange"
-                    progress_percentage = 30
-        elif purchase_order:
-            if purchase_order.status == 'verified_in_store':
-                current_status = "Materials in Stock - Ready for Assembly"
-                current_department = "Store"
-                status_color = "green"
-                progress_percentage = 30
-            elif purchase_order.status == 'store_allocated':
-                current_status = "Materials Allocated from Stock"
-                current_department = "Store"
-                status_color = "blue"
-                progress_percentage = 25
-            elif purchase_order.status == 'insufficient_stock':
-                current_status = "Insufficient Stock - Pending Purchase"
-                current_department = "Store"
-                status_color = "red"
-                progress_percentage = 15
-            elif purchase_order.status == 'pending_store_check':
-                current_status = "Checking Stock Availability"
-                current_department = "Store"
-                status_color = "yellow"
-                progress_percentage = 20
-            elif purchase_order.status == 'finance_approved':
-                current_status = "Finance Approved - Pending Store Processing"
-                current_department = "Store"
-                status_color = "blue"
-                progress_percentage = 18
-            elif purchase_order.status == 'pending_finance_approval':
-                current_status = "Awaiting Finance Approval"
-                current_department = "Finance"
-                status_color = "yellow"
-                progress_percentage = 15
-            elif purchase_order.status == 'finance_rejected':
-                current_status = "Finance Rejected"
-                current_department = "Finance"
-                status_color = "red"
-                progress_percentage = 10
-            elif purchase_order.status == 'pending_request':
-                current_status = "Pending Purchase Request Approval"
-                current_department = "Purchase"
-                status_color = "yellow"
-                progress_percentage = 10
-        else:
-            current_status = "Order Created - Pending Processing"
-            current_department = "Purchase"
-            status_color = "gray"
-            progress_percentage = 5
-        
+                return {
+                    'current_status': "On Display - Ready for Sales",
+                    'current_department': "Showroom",
+                    'status_color': "blue",
+                    'progress_percentage': 95
+                }
+            if showroom_product.showroom_status == 'pending_review':
+                return {
+                    'current_status': "Pending Showroom Review",
+                    'current_department': "Showroom",
+                    'status_color': "yellow",
+                    'progress_percentage': 85
+                }
+            return {
+                'current_status': f"Showroom Status - {showroom_product.showroom_status}",
+                'current_department': "Showroom",
+                'status_color': "blue",
+                'progress_percentage': 85
+            }
+
+        purchase_progress = purchase_status_info['progress_percentage'] if purchase_status_info else 0
+
+        assembly_active_statuses = {'in_progress', 'paused', 'completed', 'sent_to_showroom', 'pending'}
+
+        if assembly_order and assembly_order.status:
+            status_raw = assembly_order.status or ''
+            status_clean = status_raw.strip().lower()
+
+            # Block assembly status if the order hasn't cleared earlier departments
+            if status_clean not in assembly_active_statuses or status_clean == 'pending':
+                if purchase_status_info:
+                    return purchase_status_info
+                return {
+                    'current_status': "Assembly Scheduled - Awaiting Materials",
+                    'current_department': "Store" if purchase_status_info and purchase_status_info['current_department'] == "Store" else "Purchase",
+                    'status_color': "orange",
+                    'progress_percentage': max(purchase_progress, 18 if purchase_status_info and purchase_status_info['current_department'] == "Store" else 15)
+                }
+
+            if purchase_status_info and purchase_status_info['current_department'] in {"Purchase", "Finance", "Store"}:
+                return purchase_status_info
+
+            progress_raw = assembly_order.progress or 0
+            progress_value = int(progress_raw) if isinstance(progress_raw, (int, float)) else 0
+            progress_value = max(0, min(progress_value, 100))
+
+            if status_clean == 'sent_to_showroom':
+                return {
+                    'current_status': "Sent to Showroom",
+                    'current_department': "Showroom",
+                    'status_color': "purple",
+                    'progress_percentage': 90
+                }
+            if status_clean == 'completed':
+                return {
+                    'current_status': "Assembly Completed",
+                    'current_department': "Assembly",
+                    'status_color': "green",
+                    'progress_percentage': 80
+                }
+            if status_clean == 'in_progress':
+                production_progress = max(purchase_progress, min(80, 40 + (progress_value * 0.4)))
+                return {
+                    'current_status': f"In Production ({progress_value}%)",
+                    'current_department': "Assembly",
+                    'status_color': "blue",
+                    'progress_percentage': production_progress
+                }
+            if status_clean == 'paused':
+                production_progress = max(purchase_progress, min(80, 40 + (progress_value * 0.4)))
+                return {
+                    'current_status': "Production Paused",
+                    'current_department': "Assembly",
+                    'status_color': "orange",
+                    'progress_percentage': production_progress
+                }
+
+        if purchase_status_info:
+            return purchase_status_info
+
         return {
-            'current_status': current_status,
-            'current_department': current_department,
-            'status_color': status_color,
-            'progress_percentage': progress_percentage
+            'current_status': "Order Created - Pending Processing",
+            'current_department': "Purchase",
+            'status_color': "gray",
+            'progress_percentage': 5
         }
-    
+
+    @staticmethod
+    def _get_purchase_status_info(purchase_order):
+        """Return status information for purchase/store/finance phases"""
+        if not purchase_order:
+            return None
+
+        status = purchase_order.status or ''
+        status_clean = status.strip().lower()
+
+        status_mapping = {
+            'verified_in_store': {
+                'current_status': "Materials in Stock - Ready for Assembly",
+                'current_department': "Store",
+                'status_color': "green",
+                'progress_percentage': 30
+            },
+            'store_allocated': {
+                'current_status': "Materials Allocated from Stock",
+                'current_department': "Store",
+                'status_color': "blue",
+                'progress_percentage': 25
+            },
+            'insufficient_stock': {
+                'current_status': "Insufficient Stock - Pending Purchase",
+                'current_department': "Store",
+                'status_color': "red",
+                'progress_percentage': 15
+            },
+            'pending_store_check': {
+                'current_status': "Checking Stock Availability",
+                'current_department': "Store",
+                'status_color': "yellow",
+                'progress_percentage': 20
+            },
+            'finance_approved': {
+                'current_status': "Finance Approved - Pending Store Processing",
+                'current_department': "Store",
+                'status_color': "blue",
+                'progress_percentage': 18
+            },
+            'pending_finance_approval': {
+                'current_status': "Awaiting Finance Approval",
+                'current_department': "Finance",
+                'status_color': "yellow",
+                'progress_percentage': 15
+            },
+            'finance_rejected': {
+                'current_status': "Finance Rejected",
+                'current_department': "Finance",
+                'status_color': "red",
+                'progress_percentage': 10
+            },
+            'pending_request': {
+                'current_status': "Pending Purchase Request Approval",
+                'current_department': "Purchase",
+                'status_color': "yellow",
+                'progress_percentage': 10
+            }
+        }
+
+        if status_clean in status_mapping:
+            return status_mapping[status_clean]
+
+        if status_clean in ['draft', 'created', 'initiated']:
+            return {
+                'current_status': "Purchase Order Initiated",
+                'current_department': "Purchase",
+                'status_color': "yellow",
+                'progress_percentage': 8
+            }
+
+        if status_clean in ['submitted_to_finance', 'finance_pending']:
+            return {
+                'current_status': "Submitted for Finance Approval",
+                'current_department': "Finance",
+                'status_color': "yellow",
+                'progress_percentage': 12
+            }
+
+        if status in ['awaiting_store_confirmation', 'awaiting_store']:
+            return {
+                'current_status': "Awaiting Store Confirmation",
+                'current_department': "Store",
+                'status_color': "yellow",
+                'progress_percentage': 22
+            }
+
+        return {
+            'current_status': f"Purchase Status - {purchase_order.status or 'Pending'}",
+            'current_department': "Purchase",
+            'status_color': "gray",
+            'progress_percentage': 10
+        }
+
     @staticmethod
     def _calculate_estimated_completion(progress_percentage):
         """Calculate estimated completion date based on progress"""
@@ -574,10 +656,38 @@ class OrderTrackingService:
                     'progress': assembly_order.progress or 0,
                     'updated_at': getattr(assembly_order, 'updated_at', assembly_order.created_at).isoformat()
                 }
-            elif assembly_order.status in ['pending', 'paused', 'rework']:
+            elif assembly_order.status in ['paused', 'rework']:
                 return {
                     'current_department': 'assembly',
                     'status': assembly_order.status,
+                    'progress': assembly_order.progress or 0,
+                    'updated_at': getattr(assembly_order, 'updated_at', assembly_order.created_at).isoformat()
+                }
+            elif assembly_order.status == 'pending':
+                # Assembly is still queued, fall back to the latest purchase/store department
+                if purchase_order:
+                    if purchase_order.status in ['verified_in_store', 'store_allocated', 'pending_store_check']:
+                        return {
+                            'current_department': 'store',
+                            'status': purchase_order.status,
+                            'updated_at': getattr(purchase_order, 'updated_at', purchase_order.created_at).isoformat()
+                        }
+                    if purchase_order.status in ['finance_approved', 'pending_finance_approval', 'finance_rejected']:
+                        return {
+                            'current_department': 'finance',
+                            'status': purchase_order.status,
+                            'updated_at': getattr(purchase_order, 'updated_at', purchase_order.created_at).isoformat()
+                        }
+                    if purchase_order.status in ['pending_request', 'insufficient_stock']:
+                        return {
+                            'current_department': 'purchase',
+                            'status': purchase_order.status,
+                            'updated_at': getattr(purchase_order, 'updated_at', purchase_order.created_at).isoformat()
+                        }
+                # No purchase/store context, treat as queued in assembly
+                return {
+                    'current_department': 'assembly',
+                    'status': 'pending',
                     'progress': assembly_order.progress or 0,
                     'updated_at': getattr(assembly_order, 'updated_at', assembly_order.created_at).isoformat()
                 }
