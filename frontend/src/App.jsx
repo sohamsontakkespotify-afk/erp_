@@ -16,6 +16,7 @@ import SalesDashboard from '@/components/SalesDepartment';
 import DispatchDashboard from '@/components/DispatchDepartment';
 import WatchmanDashboard from '@/components/WatchmanDepartment';
 import TransportDashboard from '@/components/TransportDepartment';
+import HRDepartment from '@/components/HRDepartment';
 import { useAuth } from '@/hooks/useAuth';
 
 
@@ -108,6 +109,7 @@ function App() {
           <Route path="/dashboard/dispatch" element={<ProtectedRoute user={user} department="dispatch"><DispatchDashboard /></ProtectedRoute>} />
           <Route path="/dashboard/watchman" element={<ProtectedRoute user={user} department="watchman"><WatchmanDashboard /></ProtectedRoute>} />
           <Route path="/dashboard/transport" element={<ProtectedRoute user={user} department="transport"><TransportDashboard /></ProtectedRoute>} />
+          <Route path="/dashboard/hr" element={<ProtectedRoute user={user} department="hr"><HRDepartment /></ProtectedRoute>} />
           <Route
             path="/"
             element={<Navigate to={dashboardPath} replace />}
