@@ -18,7 +18,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "erp-3p2p.vercel.app",
         changeOrigin: true,
         secure: false,
       },
