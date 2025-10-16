@@ -1245,7 +1245,6 @@ class TransportService:
                 vehicle_type=vehicle_type,
                 driver_name=driver_name,
                 driver_contact=vehicle_data.get('driverContact', '').strip(),
-                driver_license=vehicle_data.get('driverLicense', '').strip(),
                 capacity=vehicle_data.get('capacity', '').strip(),
                 status=vehicle_data.get('status', 'available'),
                 current_location=vehicle_data.get('currentLocation', '').strip(),
