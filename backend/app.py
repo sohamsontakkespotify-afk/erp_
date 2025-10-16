@@ -36,7 +36,7 @@ def create_app(config_name=None):
 
     CORS(app,
      origins=[
-         "https://erp-3p2p.vercel.app/api",
+         "https://erp-3p2p.vercel.app",
          "https://erp-3p2p-git-main-sohams-projects-703c1079.vercel.app",
          "https://erp-3p2p-kurzr54dh-sohams-projects-703c1079.vercel.app"
      ],
