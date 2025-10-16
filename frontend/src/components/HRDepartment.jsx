@@ -2463,10 +2463,8 @@ const DashboardView = ({ employees = [] }) => {  // ✅ Accept employees as prop
         </div>
       </div>
 
-      {/* Spacer Section */}
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        {/* Empty spacer to match other departments */}
-      </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8"></div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="overflow-x-auto">
         <TabsList className="flex md:grid md:grid-cols-5 w-full overflow-x-auto overflow-y-hidden md:overflow-x-hidden whitespace-nowrap bg-gray-100 border border-gray-300 pl-0">
@@ -4513,6 +4511,7 @@ const DashboardView = ({ employees = [] }) => {  // ✅ Accept employees as prop
             <p className="font-medium">© Human Resource Management System</p>
             <p className="text-sm mt-1">For technical support, contact IT Department</p>
       </div>
+    </div>
     </div>
   );
 };
