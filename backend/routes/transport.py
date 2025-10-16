@@ -212,7 +212,7 @@ def get_fleet_vehicles():
         return jsonify({'error': str(e)}), 500
 
 
-@transport_bp.route('/fleet/add', methods=['POST'])
+@transport_bp.route('/fleet/add', methods=['GET','POST'])
 def add_fleet_vehicle():
     """Add a new vehicle to the fleet"""
     try:
