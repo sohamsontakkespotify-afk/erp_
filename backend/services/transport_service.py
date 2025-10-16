@@ -1286,8 +1286,8 @@ class TransportService:
                 vehicle.driver_name = vehicle_data['driverName'].strip()
             if 'driverContact' in vehicle_data:
                 vehicle.driver_contact = vehicle_data['driverContact'].strip()
-            if 'driverLicense' in vehicle_data:
-                vehicle.driver_license = vehicle_data['driverLicense'].strip()
+            # if 'driverLicense' in vehicle_data:
+            #     vehicle.driver_license = vehicle_data['driverLicense'].strip()
             if 'capacity' in vehicle_data:
                 vehicle.capacity = vehicle_data['capacity'].strip()
             if 'status' in vehicle_data:
