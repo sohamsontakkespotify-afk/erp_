@@ -583,7 +583,7 @@ const WatchmanDepartment = () => {
             {/* Order Status Bar */}
             <div className="max-w-7xl mx-auto px-6 py-4">
                 <OrderStatusBar className="mb-4" />
-            </div>
+            
 
             {/* Main Content */}
             <div className="px-6 py-6">
@@ -1510,7 +1510,7 @@ const WatchmanDepartment = () => {
                 </div>
             </div>
         </div>
-        
+       </div> 
     );
 };
 
