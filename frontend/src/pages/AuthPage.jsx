@@ -34,6 +34,7 @@ const AuthPage = () => {
     { id: 'finance', name: 'Finance Department', icon: '💰' },
     { id: 'showroom', name: 'Showroom Department', icon: '🏪' },
     { id: 'sales', name: 'Sales Department', icon: '💼' },
+    { id: 'hr', name: 'Human Resources Department', icon: '👥' },
     { id: 'dispatch', name: 'Dispatch Department', icon: '📋' },
     { id: 'watchman', name: 'Watchman Department', icon: '👁️' },
     { id: 'transport', name: 'Transport Department', icon: '🚛' }
