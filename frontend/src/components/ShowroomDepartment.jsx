@@ -350,7 +350,7 @@ const ShowroomDepartment = () => {
       {/* Order Status Bar */}
       <div className="max-w-7xl mx-auto px-6 py-4">
         <OrderStatusBar className="mb-4" />
-      </div>
+      
 
       {/* Tabs */}
       <div className="max-w-7xl mx-auto px-6">
@@ -722,6 +722,7 @@ const ShowroomDepartment = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 // Removed duplicate dialog and footer
 };
