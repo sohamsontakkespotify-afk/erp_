@@ -50,7 +50,7 @@ class Config:
     GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI', 'http://localhost:5000/api/auth/google/callback')
 
     # Frontend URL for OAuth redirects
-    FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL', 'http://localhost:5173')
+    FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL', 'erp-3p2p.vercel.app')
 
 class DevelopmentConfig(Config):
     """Development configuration"""
